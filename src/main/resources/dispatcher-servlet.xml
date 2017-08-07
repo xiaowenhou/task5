@@ -19,6 +19,7 @@
 	<!-- 默认的servlet处理器,处理静态资源 -->
 	<mvc:default-servlet-handler/>
 	
+	<!-- 配置转发,简化控制器代码 -->
 	<mvc:view-controller path="/index" view-name="index"/>
 	
 	<mvc:view-controller path="/hello" view-name="hello"/>
