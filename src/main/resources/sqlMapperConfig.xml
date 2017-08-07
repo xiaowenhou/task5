@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+ <typeAliases>
+		<typeAlias alias="Student" type="com.putaoteng.task5.model.Student" />
+		<typeAlias alias="ExcellentStudent"
+			type="com.putaoteng.task5.model.ExcellentStudent" />
+		<typeAlias alias="Profession" type="com.putaoteng.task5.model.Profession" />
+		<typeAlias alias="User" type="com.putaoteng.task5.model.User" />
+</typeAliases>
+  <mappers>
+		<mapper resource="sqlMapper/ExcellentStudentDao.xml" />
+		<mapper resource="sqlMapper/StudentDao.xml" />
+		<mapper resource="sqlMapper/ProfessionDao.xml" />
+		<mapper resource="sqlMapper/UserDao.xml" />
+	</mappers> 
+</configuration>

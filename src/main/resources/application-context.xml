@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd ">
+
+	<context:annotation-config />
+
+	<!-- <context:property-placeholder location="classpath*:db.properties"/> -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<value>classpath*:db.properties</value>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
+		<!-- <property name="driverClass" value="${jdbc.driverClassName}"></property> -->
+		<property name="jdbcUrl" value="${jdbc.url}"></property>
+		<property name="user" value="${jdbc.username}"></property>
+		<property name="password" value="${jdbc.password}"></property>
+		<!-- 连接池中保留的最大连接数 -->
+		<property name="maxPoolSize" value="${jdbc.maxPoolSize}"></property>
+		<!-- 连接池中保留的最小连接数 -->
+		<property name="minPoolSize" value="${jdbc.minPoolSize}"></property>
+		<!-- 连接池中的初始化连接数.取值应在最小连接数和最大连接数之间 默认:3 -->
+		<property name="initialPoolSize" value="${jdbc.initialPoolSize}"></property>
+		<!-- 最大空闲时间,60秒内未使用则链接被丢弃.若为0则永不丢弃,默认:0 -->
+		<property name="maxIdleTime" value="${jdbc.maxIdleTime}"></property>
+		<!-- 当连接池中的链接耗尽时c3p0一次同时获取的连接数 , 默认:3 -->
+		<property name="acquireIncrement" value="${jdbc.acquireIncrement}"></property>
+		<!-- JDBC标准,用以控制数据源内加载的PreparedStatements数量.由于与缓存的statements属于
+		单个connectiong而不是整个连接池,所以设置这个参数需要考虑到多方面的因数.如果maxStatements与maxStatementsPerConnection均为0,
+		则缓存被关闭.	Default:0 -->
+		<property name="maxStatements" value="${jdbc.maxStatements}"></property>
+		<!-- 每60秒检查所有连接池中的空闲连接数.	Default:0 -->
+		<property name="idleConnectionTestPeriod" value="${jdbc.idleConnectionTestPeriod}"></property>
+	</bean>
+
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="configLocation" value="classpath:sqlMapperConfig.xml"></property>
+	</bean>
+
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.putaoteng.task5.dao"></property>
+	</bean>
+
+	<!-- 自动扫描包下面的注解,生成对象 -->
+	<context:component-scan base-package="com.putaoteng.task5"></context:component-scan>
+	
+	<!-- 自动扫描切面注解 -->
+	<aop:aspectj-autoproxy/>
+	
+	
+	<aop:config>
+    	<aop:aspect id="myAspectService" ref="logAdvice">
+    		<aop:pointcut expression="execution(* com.putaoteng.task5.dao.*Dao.*(..))" id="pc"/>
+    		<aop:around method="around" pointcut-ref="pc"/>
+    	</aop:aspect>
+    </aop:config>
+	
+	 
+	 <!-- <bean id="studentDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+		<property name="mapperInterface" value="com.putaoteng.task4.dao.StudentDao" />
+	</bean>  -->
+	<!--<bean id="excellentStudentDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+		<property name="mapperInterface" value="com.putaoteng.task4.dao.ExcellentStudentDao" />
+	</bean>
+	<bean id="professionDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+		<property name="mapperInterface" value="com.putaoteng.task4.dao.ProfessionDao" />
+	</bean> -->
+	<bean id="userDao" class="org.mybatis.spring.mapper.MapperFactoryBean">
+		<property name="sqlSessionFactory" ref="sqlSessionFactory" />
+		<property name="mapperInterface" value="com.putaoteng.task5.dao.UserDao" />
+	</bean> 
+	
+</beans>

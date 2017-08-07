@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+	<!-- 自动扫描controller包下的注解 -->
+	<context:component-scan base-package="com.putaoteng.task5.controller"></context:component-scan>
+	
+	<!-- 开启注解驱动,自动加载新版的处理器映射器和处理器适配器 -->
+	<mvc:annotation-driven/>
+	
+	<!-- 默认的servlet处理器,处理静态资源 -->
+	<mvc:default-servlet-handler/>
+	
+	<mvc:view-controller path="/index" view-name="index"/>
+	
+	<mvc:view-controller path="/hello" view-name="hello"/>
+	
+	<!-- 拦截器相关配置 -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/u/profession"/>
+			<bean class="com.putaoteng.task5.utils.SimpleInterceptor"/>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/u/test"/>
+			<bean class="com.putaoteng.task5.utils.SessionInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+	
+    
+	<!-- 视图解析器的前后缀 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver" p:order="2">
+		<property name="prefix" value="/WEB-INF/"></property>
+		<property name="suffix" value=".jsp"></property>
+	</bean>
+	
+	
+	
+	<!-- tiles框架相关配置 -->
+    <bean id="tilesConfigurer"
+        class="org.springframework.web.servlet.view.tiles3.TilesConfigurer">
+        <property name="definitions">
+            <list>
+                <value>classpath:tiles.xml</value>
+            </list>
+        </property>
+        <property name="checkRefresh" value="true"></property>
+    </bean>
+    
+    <!-- url视图解析器 ,该解析器会将视图名称翻译成URL并通过RequestDispatcher处理请求后渲染视图-->
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.tiles3.TilesViewResolver"
+	p:order="1">
+    </bean>
+    
+    <!-- 使用aop的配置 -->
+    <aop:config>
+    	<aop:aspect id="myAspectController" ref="logAdvice">
+    		<aop:pointcut expression="execution(* com.putaoteng.task5.controller.Task5Controller.*(..))" id="pc2"/>
+    		<aop:around method="around" pointcut-ref="pc2"/>
+    	</aop:aspect>
+    </aop:config>
+</beans>

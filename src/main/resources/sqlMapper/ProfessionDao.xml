@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.putaoteng.task5.dao.ProfessionDao">
+	<resultMap id="professionMap" type="com.putaoteng.task5.model.Profession">
+		<result property="id" column="id" />
+		<result property="profession" column="profession" />
+		<result property="introduction" column="introduction" />
+		<result property="threshold" column="threshold" />
+		<result property="level" column="level" />
+		<result property="cycle" column="cycle" />
+		<result property="requirement" column="requirement" />
+		<result property="timeFirst" column="time_first" />
+		<result property="salaryFirst" column="salary_first" />
+		<result property="timeSecond" column="time_second" />
+		<result property="salarySecond" column="salary_second" />
+		<result property="timeThird" column="time_third" />
+		<result property="salaryThird" column="salary_third" />
+		<result property="number" column="number" />
+		<result property="base" column="base" />
+		<result property="createAt" column="create_at" />
+		<result property="updateAt" column="update_at" />
+
+	</resultMap>
+	<!-- ============================= INSERT ============================= -->
+	<insert id="save" useGeneratedKeys="true" keyProperty="id"
+		parameterType="Profession">
+		INSERT INTO profession(
+		id,profession,introduction,threshold,level,cycle,requirement,time_first,salary_first,time_second,salary_second,time_third,salary_third,number,base,create_at,update_at)
+		VALUES (
+		#{id},#{profession},#{introduction},#{threshold},#{level},#{cycle},#{requirement},#{timeFirst},#{salaryFirst},#{timeSecond},#{salarySecond},#{timeThird},#{salaryThird},#{number},#{base},#{createAt},#{updateAt})
+	</insert>
+
+	<insert id="saveBatch" useGeneratedKeys="true" parameterType="List">
+		INSERT INTO profession
+		(id,profession,introduction,threshold,level,cycle,requirement,time_first,salary_first,time_second,salary_second,time_third,salary_third,number,base,create_at,update_at))
+		VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.id},#{item.profession},#{item.introduction},#{item.threshold},#{item.level},#{item.cycle},#{item.requirement},#{item.timeFirst},#{item.salaryFirst},#{item.timeSecond},#{item.salarySecond},#{item.timeThird},#{item.salaryThird},#{item.number},#{item.base},#{item.createAt},#{item.updateAt})
+		</foreach>
+	</insert>
+	<!-- ============================= UPDATE ============================= -->
+	<update id="update" parameterType="Profession">
+		UPDATE profession
+		<set>
+			id=#{id},
+			profession=#{profession},
+			introduction=#{introduction},
+			threshold=#{threshold},
+			level=#{level},
+			cycle=#{cycle},
+			requirement=#{requirement},
+			time_first=#{timeFirst},
+			salary_first=#{salaryFirst},
+			time_second=#{timeSecond},
+			salary_second=#{salarySecond},
+			time_third=#{timeThird},
+			salary_third=#{salaryThird},
+			number=#{number},
+			base=#{base},
+			create_at=#{createAt},
+			update_at=#{updateAt},
+		</set>
+		WHERE id=#{id}
+	</update>
+
+	<update id="updateIgnoreNull" parameterType="Profession">
+		UPDATE profession
+		<set>
+			<if test="id!= null">id=#{id},</if>
+			<if test="profession!= null">profession=#{profession},</if>
+			<if test="introduction!= null">introduction=#{introduction},</if>
+			<if test="threshold!= null">threshold=#{threshold},</if>
+			<if test="level!= null">level=#{level},</if>
+			<if test="cycle!= null">cycle=#{cycle},</if>
+			<if test="requirement!= null">requirement=#{requirement},</if>
+			<if test="timeFirst!= null">time_first=#{timeFirst},</if>
+			<if test="salaryFirst!= null">salart_first=#{salaryFirst},</if>
+			<if test="timeSecond!= null">time_second=#{timeSecond},</if>
+			<if test="salarySecond!= null">salart_second=#{salarySecond},</if>
+			<if test="timeThird!= null">time_third=#{timeThird},</if>
+			<if test="salaryThird!= null">salart_third=#{salaryThird},</if>
+			<if test="number!= null">number=#{number},</if>
+			<if test="base!= null">base=#{base},</if>
+			<if test="createAt!= null">create_at=#{createAt},</if>
+			<if test="updateAt!= null">update_at=#{updateAt},</if>
+		</set>
+		WHERE id=#{id}
+	</update>
+
+	<update id="updateBatch" parameterType="List">
+		<foreach collection="list" item="item" index="index" separator=";">
+			UPDATE profession
+			<set>
+				id=#{item.id},
+				profession=#{item.profession},
+				introduction=#{item.introduction},
+				threshold=#{item.threshold},
+				level=#{item.level},
+				cycle=#{item.cycle},
+				requirement=#{item.requirement},
+				time_first=#{item.timeFirst},
+				salary_first=#{item.salaryFirst},
+				time_second=#{item.timeSecond},
+				salary_second=#{item.salarySecond},
+				time_third=#{item.timeThird},
+				salary_third=#{item.salaryThird},
+				number=#{item.number},
+				base=#{item.base},
+				create_at=#{item.createAt},
+				update_at=#{item.updateAt},
+			</set>
+			WHERE id=#{item.id}
+		</foreach>
+	</update>
+
+	<!-- ============================= DELETE ============================= -->
+	<delete id="delete">
+		DELETE FROM profession
+		WHERE id=#{id}
+	</delete>
+
+	<delete id="deleteByPK">
+		DELETE FROM profession
+		WHERE id=#{id}
+	</delete>
+	
+	<delete id="deleteBatch">
+		DELETE FROM profession
+		WHERE
+		<foreach collection="list" item="item" index="index" open="("
+			separator="OR" close=")">
+			(id=#{item.id} )
+		</foreach>
+	</delete>
+
+	<delete id="deleteAll">
+		DELETE FROM profession
+	</delete>
+
+	<!-- ============================= SELECT ============================= -->
+	<select id="count" resultType="java.lang.Long">
+		SELECT COUNT(1) FROM profession
+	</select>
+
+	<select id="findByPK" resultMap="professionMap">
+		SELECT * FROM profession
+		WHERE
+		id=#{id}
+	</select>
+
+	<select id="findAll" resultMap="professionMap">
+		SELECT * FROM profession
+	</select>
+</mapper>

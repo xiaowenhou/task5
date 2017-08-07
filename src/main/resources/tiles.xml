@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+  <definition name="defaultTemplate"  template="/WEB-INF/tiles/classic.jsp">
+     <put-attribute name="title"  value="" />
+     <put-attribute name="header" value="/WEB-INF/tiles/header.jsp" />
+     <put-attribute name="menu" value="/WEB-INF/tiles/menu.jsp" />
+     <put-attribute name="body" value="" />
+     <put-attribute name="footer" value="/WEB-INF/tiles/footer.jsp" />
+  </definition>
+  
+  <!-- 职业列表页面 -->
+  <definition name="profession" extends="defaultTemplate">
+  	<put-attribute name="title" value="职业列表"/>
+  	<put-attribute name="body" value="/WEB-INF/profession.jsp"/>
+  </definition>
+  
+  <!-- 前端职业页面 -->
+  <definition name="front" extends="defaultTemplate">
+  	<put-attribute name="title" value="前端职业"/>
+  	<put-attribute name="body" value="/WEB-INF/front.jsp"/>
+  </definition>
+  
+  <!-- tiles测试页面 -->
+  <definition name="hello" extends="defaultTemplate">
+  	<put-attribute name="title" value="Hello,Tiles"></put-attribute>
+  	<put-attribute name="body" value="/WEB-INF/hello.jsp"></put-attribute>
+  </definition>
+  
+  <!-- 登陆页面 -->
+  <definition name="login" extends="defaultTemplate">
+  	<put-attribute name="title" value="登陆"/>
+  	<put-attribute name="body" value="/WEB-INF/login.jsp"></put-attribute>
+  </definition>
+  
+   <!-- 退出页面 -->
+  <definition name="bye" extends="defaultTemplate">
+  	<put-attribute name="title" value="再见"/>
+  	<put-attribute name="body" value="/WEB-INF/bye.jsp"></put-attribute>
+  </definition>
+  
+  <!-- test页面 -->
+  <definition name="test" extends="defaultTemplate">
+  	<put-attribute name="title" value="TEST"/>
+  	<put-attribute name="body" value="/WEB-INF/test.jsp"></put-attribute>
+  </definition>
+  
+	<!-- 注册 -->  
+   <definition name="registration" extends="defaultTemplate">
+  	<put-attribute name="title" value="注册"/>
+  	<put-attribute name="body" value="/WEB-INF/registration.jsp"></put-attribute>
+  </definition>
+</tiles-definitions>

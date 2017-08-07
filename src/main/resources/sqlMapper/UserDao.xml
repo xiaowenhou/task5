@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.putaoteng.task5.dao.UserDao">
+	<resultMap id="userResultMap" type="com.putaoteng.task5.model.User">
+		<result property="id" column="id" />
+		<result property="username" column="username" />
+		<result property="password" column="password"/>
+		<result property="loginAt" column="login_at"/>
+		<result property="createAt" column="create_at" />
+		
+	</resultMap>
+	<!-- ============================= INSERT ============================= -->
+	<insert id="save" useGeneratedKeys="true" keyProperty="id"
+		parameterType="User">
+		INSERT INTO user(
+		id,username,password,login_at,create_at)
+		VALUES (
+		#{id},#{username},#{password},#{loginAt},#{createAt})
+	</insert>
+
+	<insert id="saveBatch" useGeneratedKeys="true" parameterType="List">
+		INSERT INTO user
+		(id,username,password,login_at,create_at)
+		VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.id},#{item.username},#{item.password},#{item.loginAt},#{item.createAt})
+		</foreach>
+	</insert>
+
+	<!-- ============================= UPDATE ============================= -->
+	<update id="update" parameterType="User">
+		UPDATE user
+		<set>
+			id=#{id},
+			username=#{username},
+			password=#{password},
+			login_at=#{loginAt},
+			create_at=#{createAt},
+		</set>
+		WHERE id=#{id}
+	</update>
+
+	<update id="updateIgnoreNull" parameterType="User">
+		UPDATE user
+		<set>
+			<if test="id!= null">id=#{id},</if>
+			<if test="name!= null">username=#{username},</if>
+			<if test="password!= null">password=#{password},</if>
+			<if test="loginAt!= null">login_at=#{loginAt},</if>
+			<if test="createAt!= null">create_at=#{createAt},</if>
+		</set>
+		WHERE id=#{id}
+	</update>
+
+	<update id="updateBatch" parameterType="List">
+		<foreach collection="list" item="item" index="index"
+			separator=";">
+			UPDATE user
+			<set>
+				id=#{item.id},
+				username=#{item.username},
+				password=#{item.password},
+				login_at=#{item.loginAt},
+				create_at=#{item.createAt},
+			</set>
+			WHERE id=#{item.id}
+		</foreach>
+	</update>
+
+	<!-- ============================= DELETE ============================= -->
+	<delete id="delete">
+		DELETE FROM user
+		WHERE id=#{id}
+	</delete>
+
+	<delete id="deleteBatch">
+		DELETE FROM user
+		WHERE
+		<foreach collection="list" item="item" index="index" open="("
+			separator="OR" close=")">
+			(id=#{item.id} )
+		</foreach>
+	</delete>
+
+	<delete id="deleteByPK">
+		DELETE FROM user
+		WHERE id=#{id}
+	</delete>
+
+	<delete id="deleteAll">
+		DELETE FROM user
+	</delete>
+
+	<!-- ============================= SELECT ============================= -->
+	<select id="count" resultType="java.lang.Long">
+		SELECT COUNT(1) FROM user
+	</select>
+
+	<select id="findByPK" resultMap="userResultMap">
+		SELECT * FROM user
+		WHERE
+		id=#{id}
+	</select>
+	
+	<select id="findByUsername" resultMap="userResultMap">
+		SELECT * FROM user
+		WHERE
+		username=#{username}
+	</select>
+
+	<select id="findAll" resultMap="userResultMap">
+		SELECT * FROM user
+	</select>
+
+
+	<!-- <select id="find" resultType="Book">
+		SELECT * FROM book
+		<where>
+			<if test="bookId!= null"> AND book_id = #{bookId} </if>
+			<if test="title!= null">
+				AND title like #{title}
+			</if>
+			<if test="minprice!= null"> AND price >= #{minprice}
+			</if>
+			<if test="maxprice!= null"> <![CDATA[ AND price < #{maxprice} ]]>
+			</if>
+			<if test="publishTime!= null"> AND publish_time = #{publishTime} </if>
+			<if test="blobContent!= null"> AND blob_content = #{blobContent} </if>
+			<if test="textContent!= null"> AND text_content = #{textContent} </if>
+		</where>
+	</select> -->
+</mapper>

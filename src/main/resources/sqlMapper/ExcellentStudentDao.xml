@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.putaoteng.task5.dao.ExcellentStudentDao">
+	<resultMap id="excellentStudentMap" type="com.putaoteng.task5.model.ExcellentStudent">
+		<result property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="imgUrl" column="img_url" />
+		<result property="profession" column="profession" />
+		<result property="desire" column="desire" />
+		<result property="createAt" column="create_at" />
+		<result property="updateAt" column="update_at" />
+	</resultMap>
+	<!-- ============================= INSERT ============================= -->
+	<insert id="save" useGeneratedKeys="true" keyProperty="id"
+		parameterType="ExcellentStudent">
+		INSERT INTO excellent_student(
+		id,name,img_url,profession,desire,create_at,update_at)
+		VALUES (
+		#{id},#{name},#{imgUrl},#{profession},#{desire},#{createAt},#{updateAt})
+	</insert>
+
+	<insert id="saveBatch" useGeneratedKeys="true" parameterType="List">
+		INSERT INTO excellent_student
+		(id,name,img_url,profession,desire,create_at,update_at)
+		VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{id},#{name},#{imgUrl},#{profession},#{desire},#{createAt},#{updateAt})
+		</foreach>
+	</insert>
+	
+	<!-- ============================= UPDATE ============================= -->
+	<update id="update" parameterType="ExcellentStudent">
+		UPDATE excellent_student
+		<set>
+			id=#{id},
+			name=#{name},
+			img_url=#{imgUrl},
+			profession=#{profession},
+			create_at=#{createAt},
+			update_at=#{updateAt},
+		</set>
+		WHERE id=#{id}
+	</update>
+
+	<update id="updateIgnoreNull" parameterType="ExcellentStudent">
+		UPDATE excellent_student
+		<set>
+			<if test="id!= null">id=#{id},</if>
+			<if test="name!= null">name=#{name},</if>
+			<if test="imgUrl!= null">img_url=#{imgUrl},</if>
+			<if test="profession!= null">profession=#{profession},</if>
+			<if test="createAt!= null">create_at=#{createAt},</if>
+			<if test="updateAt!= null">update_at=#{updateAt},</if>
+		</set>
+		WHERE id=#{id}
+	</update>
+
+	<update id="updateBatch" parameterType="List">
+		<foreach collection="list" item="item" index="index"
+			separator=";">
+			UPDATE excellent_student
+			<set>
+				id=#{item.id},
+				name=#{item.name},
+				img_url=#{item.imgUrl},
+				create_at=#{item.createAt},
+				update_at=#{item.updateAt},
+			</set>
+			WHERE id=#{item.id}
+		</foreach>
+	</update>
+	
+	<!-- ============================= DELETE ============================= -->
+	<delete id="delete">
+		DELETE FROM excellent_student
+		WHERE id=#{id}
+	</delete>
+
+	<delete id="deleteByPK">
+		DELETE FROM excellent_student
+		WHERE id=#{id}
+	</delete>
+
+	<delete id="deleteBach">
+		DELETE FROM excellent_student
+		WHERE
+		<foreach collection="list" item="item" index="index" open="("
+			separator="OR" close=")">
+			( id=#{itme.id} )	
+		</foreach>
+	</delete>
+
+	<delete id="deleteAll">
+		DELETE FROM excellent_student
+	</delete>
+
+	<!-- ============================= SELECT ============================= -->
+	<select id="count" resultType="java.lang.Long">
+		SELECT COUNT(1) FROM
+		excellent_student
+	</select>
+
+	<select id="findByPK" resultMap="excellentStudentMap">
+		SELECT * FROM excellent_student
+		WHERE id=#{id}
+	</select>
+
+	<select id="findAll" resultMap="excellentStudentMap">
+		SELECT * FROM excellent_student
+	</select>
+</mapper>
